@@ -16,9 +16,12 @@ def get_recommendations(title):
     vect_title = tfidf.transform([title])
     results = cosine_similarity(tfidf_matrix,vect_title).reshape((-1,))
     recommends = df.iloc[results.argsort()[-10:][::-1]]
+    new_df = recommends.copy()
+    new_df['comic_name'] = recommends.comic_name.apply(lambda x: x.split('(')[0][:-1])
+    new_df.drop(['Imprint','Format','Rating'], axis=1, inplace=True)
     name = title+"_recommendations.csv"
     save_path = os.path.join(dir, name)
-    recommends.to_csv(save_path)
+    new_df.to_csv(save_path)
 
 if __name__ == "__main__":
     get_recommendations("Daredevil")

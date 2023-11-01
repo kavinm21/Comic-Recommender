@@ -8,7 +8,9 @@ load_dotenv()
 public_key = os.getenv('PUBLIC_KEY')
 private_key = os.getenv('PRIVATE_KEY')
 
-
+dir = './extracts'
+if not os.path.exists(dir):
+    os.mkdir(dir)
 
 def get_comics(char_name):
     m = Marvel(public_key, private_key)
@@ -48,7 +50,7 @@ def get_comics(char_name):
                 obj['penciler'] = obj['letterer']
         obj['comic_name'] = obj.pop('series')
         obj['issue_title'] = obj.pop('title')
-        obj['issue_description'] = obj.pop('descrption')
+        obj['issue_description'] = obj.pop('description')
         rem = ('prices', 'editor', 'painter', 'painter (cover)', 'digitalPurchasePrice', 'focDate', 'unlimitedDate', 'digitalPurchaseDate', 'penciller', 'penciller (cover)', 'colorist (cover)', 'inker (cover)', 'penciler (cover)', 'issueNumber', 'inker', 'letterer', 'colorist')
         for k in rem:
             obj.pop(k, None)
@@ -56,7 +58,9 @@ def get_comics(char_name):
         obj['Price'] = obj.pop('printPrice')
         data.append(obj)
     extract_df = pd.DataFrame(data)
-    extract_df.to_csv(char_name + ".csv")
+    cols = ['comic_name','active_years','issue_title','publish_date','issue_description','penciler','writer','cover_artist','Price']
+    name = char_name + ".csv"
+    extract_df.to_csv(os.path.join(dir, name))
     print(f'Saved character({char_name}) data')
 
 def get_all_comics(st, en):
