@@ -55,9 +55,12 @@ def get_comics(char_name):
         for k in rem:
             obj.pop(k, None)
         obj['publish_date'] = obj.pop('onsaleDate')
+        obj['publish_date'] = obj['publish_date'].split('T')[0]
         obj['Price'] = obj.pop('printPrice')
+        obj['Price'] = '$' + str(obj['Price'])
         if 'cover_artist' not in obj.keys():
-            obj['cover_artist'] = None
+            obj['cover_artist'] = ''
+        obj['cover_artist'] = str(obj['cover_artist'])
         data.append(obj)
     extract_df = pd.DataFrame(data)
     cols = ['comic_name','issue_title','publish_date','issue_description','penciler','writer','cover_artist','Price']
