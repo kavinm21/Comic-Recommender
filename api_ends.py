@@ -48,6 +48,7 @@ def get_comics(char_name):
                 obj['penciler'] = obj['letterer']
         obj['comic_name'] = obj.pop('series')
         obj['issue_title'] = obj.pop('title')
+        obj['issue_description'] = obj.pop('descrption')
         rem = ('prices', 'editor', 'painter', 'painter (cover)', 'digitalPurchasePrice', 'focDate', 'unlimitedDate', 'digitalPurchaseDate', 'penciller', 'penciller (cover)', 'colorist (cover)', 'inker (cover)', 'penciler (cover)', 'issueNumber', 'inker', 'letterer', 'colorist')
         for k in rem:
             obj.pop(k, None)
