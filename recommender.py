@@ -18,10 +18,11 @@ def get_recommendations(title):
     recommends = df.iloc[results.argsort()[-10:][::-1]]
     new_df = recommends.copy()
     new_df['comic_name'] = recommends.comic_name.apply(lambda x: x.split('(')[0][:-1])
-    new_df.drop(['Imprint','Format','Rating'], axis=1, inplace=True)
+    new_df.drop(['Imprint','Format','Rating', 'active_years'], axis=1, inplace=True)
     name = title+"_recommendations.csv"
     save_path = os.path.join(dir, name)
     new_df.to_csv(save_path)
 
 if __name__ == "__main__":
-    get_recommendations("Daredevil")
+    get_recommendations("Charles Xavier")
+    get_recommendations('Daredevil')

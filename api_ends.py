@@ -8,13 +8,13 @@ load_dotenv()
 public_key = os.getenv('PUBLIC_KEY')
 private_key = os.getenv('PRIVATE_KEY')
 
-dir = './extracts'
-if not os.path.exists(dir):
-    os.mkdir(dir)
 
 def get_comics(char_name):
     m = Marvel(public_key, private_key)
     comic_data = m.comics.all(titleStartsWith=char_name, dateRange="2019-01-01,2023-01-01", limit="100")
+    if comic_data['data']['total'] == 0:
+        print(f"Couldn't Extract ({char_name}) data")
+        return None
     extract = comic_data['data']['results']
     data = []
     for i in range(len(extract)):
@@ -56,15 +56,17 @@ def get_comics(char_name):
             obj.pop(k, None)
         obj['publish_date'] = obj.pop('onsaleDate')
         obj['Price'] = obj.pop('printPrice')
+        if 'cover_artist' not in obj.keys():
+            obj['cover_artist'] = None
         data.append(obj)
     extract_df = pd.DataFrame(data)
-    cols = ['comic_name','active_years','issue_title','publish_date','issue_description','penciler','writer','cover_artist','Price']
-    name = char_name + ".csv"
-    extract_df.to_csv(os.path.join(dir, name))
-    print(f'Saved character({char_name}) data')
+    cols = ['comic_name','issue_title','publish_date','issue_description','penciler','writer','cover_artist','Price']
+    extract_df = extract_df[cols]
+    print(f'Extracted ({char_name}) data')
+    return extract_df
 
 def get_all_comics(st, en):
-    m = Marvel('f138004427765f8359538e05bc0d25c5', '85ecc421eacd9e7ac1cf3f0db0bdae03bf3ae69f')
+    m = Marvel(public_key, private_key)
     comic_data = m.comics.all(dateRange=st+","+en, limit="100")
     extract = comic_data['data']['results']
     data = []
