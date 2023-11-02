@@ -8,7 +8,6 @@ load_dotenv()
 public_key = os.getenv('PUBLIC_KEY')
 private_key = os.getenv('PRIVATE_KEY')
 
-
 def get_comics(char_name):
     m = Marvel(public_key, private_key)
     comic_data = m.comics.all(titleStartsWith=char_name, dateRange="2019-01-01,2023-01-01", limit="100")

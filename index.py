@@ -9,6 +9,7 @@ if not os.path.exists(dir):
     os.mkdir(dir)
 
 def create_result(text):
+    print('Creating Result for query')
     df1 = pd.read_csv("./recommendations/" + text + "_recommendations.csv")
     df2 = pd.read_csv("./extracts/" + text + ".csv")
     df2 = df2.astype({"cover_artist": type('')})
@@ -35,6 +36,7 @@ def clear_folders():
     for filename in os.listdir('./result'):
         if os.path.isfile(os.path.join('./result', filename)):
             os.remove(os.path.join('./result', filename))  
+    print('Cleared extracts, recommendations and result directories')
 
 if __name__ == "__main__":
     clear_folders()
@@ -43,5 +45,4 @@ if __name__ == "__main__":
     enhance.make_extracts()
     create_result(text)
     print(f'The file {text}.csv contains the recommended comics for your input')
-    
     
