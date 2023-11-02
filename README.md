@@ -1,4 +1,4 @@
-# Comic-Recommender
+# Comic Recommender System
 A Recommendation System project for DS course
 
 ## Requirements
